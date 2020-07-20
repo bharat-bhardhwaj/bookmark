@@ -164,6 +164,42 @@ router.delete('/deletetag/:id',async (req,res)=>{
 
 
 
+// add a tag
+// @routes: "/add/:bookmark_id/:tag_id"
+// data: title
+// Method: "put"
+
+
+router.put('/add/:bookmark_id/:tag_id',async (req,res)=>{
+    try {
+        const bookmark= await Bookmark.findById(req.params.bookmark_id);
+        const tag =await Tag.findById(req.params.tag_id);
+
+        if(!bookmark || !tag){
+            return res.status(400).json({msg:'Inavalid credentials'});
+        }
+
+        if(bookmark.Tags.filter(Taged=> Taged.Tag.toString() === req.params.tag_id ).length > 0) {
+            return res.status(400).json({msg:'already tagged'});
+        }
+        
+
+        const tagb={
+            Tag:tag._id
+        }
+
+        bookmark.Tags.unshift(tagb)
+
+        await bookmark.save();
+        res.json(bookmark)
+
+    } catch (err) {
+        console.error(err.msg);
+        res.status(500).send('server error')
+    }
+})
+
+
 
 
 
