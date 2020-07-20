@@ -250,7 +250,7 @@ router.get('/bookmark',async(req,res)=>{
     try {
         const bookmark = await Bookmark.find().sort({data:-1})
 
-        console.log(bookmark)
+        
 
         if(!bookmark){
             return res.status(404).json({msg:"bookmarms does not exist"})
@@ -265,7 +265,29 @@ router.get('/bookmark',async(req,res)=>{
     
 
     
-})
+});
+
+router.get('/tag',async(req,res)=>{
+
+    try {
+        const tag = await Tag.find().sort({data:-1})
+
+        
+
+        if(!tag){
+            return res.status(404).json({msg:"bookmarms does not exist"})
+        }
+
+        res.json(tag)
+    } catch (err) {
+        console.error(err.msg);
+        res.status(500).send('server error')
+    }
+    
+    
+
+    
+});
 
 
 
