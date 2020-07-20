@@ -57,4 +57,33 @@ async (req,res)=>{
 })
 
 
+// deletin a bookmark
+// @routes: "/delete/id"
+// data: bookmarkid 
+// Method: "delete"
+
+router.delete('/delete/:id',async (req,res)=>{
+    try {
+
+        const bookmark= await Bookmark.findById(req.params.id);
+
+        if(!bookmark){
+            return res.status(404).json({msg:'bookmark not found'})
+        }
+
+
+        await bookmark.remove();
+
+
+        res.json({msg:"bookmark removed"})
+        
+    } catch (err) {
+        console.error(err.msg)
+        res.status(500).send('server error')
+    }
+})
+
+
+
+
 module.exports = router;
