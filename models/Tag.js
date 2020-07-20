@@ -1,7 +1,7 @@
 const mongoose =require('mongoose');
 
 const TagSchema=new mongoose.Schema({
-    Title:{
+    title:{
         type:String,
         required:true,
         unique:true

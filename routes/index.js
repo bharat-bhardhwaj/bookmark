@@ -85,5 +85,61 @@ router.delete('/delete/:id',async (req,res)=>{
 
 
 
+// tags api
+
+
+// creating a tag
+// @routes: "/createtag"
+// data: title
+// Method: "POSt"
+router.post('/createtag',
+[
+    
+    check('title','title is required').not().isEmpty(),
+    
+],
+async (req,res)=>{
+    const errors =validationResult(req);
+
+    if(!errors.isEmpty()){
+        return res.status(400).json({errors:errors.array()});
+    }
+
+    const {title}=req.body;
+
+
+
+    try {
+        
+        const tag =await Tag.findOne({title})
+
+        if(tag){
+            return res.status(404).json({msg:'tag is already present'})
+        }
+
+        const newtag=new Tag({
+            title
+            
+        });
+        
+        const tagb= await newtag.save();
+       
+        res.json(tagb)
+
+
+    } catch (err) {
+        console.error(err);
+
+        res.status(500).send('server error')
+    }
+})
+
+
+
+
+
+
+
+
 
 module.exports = router;
