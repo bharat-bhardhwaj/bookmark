@@ -135,6 +135,32 @@ async (req,res)=>{
 })
 
 
+// deleting a bookmark
+// @routes: "/deletetag/id"
+// data: tagid 
+// Method: "delete"
+
+router.delete('/deletetag/:id',async (req,res)=>{
+    try {
+
+        const tag= await Tag.findById(req.params.id);
+
+        if(!tag){
+            return res.status(404).json({msg:'tag not found'})
+        }
+
+
+        await Tag.remove();
+
+
+        res.json({msg:"tag removed"})
+        
+    } catch (err) {
+        console.error(err.msg)
+        res.status(500).send('server error')
+    }
+})
+
 
 
 
