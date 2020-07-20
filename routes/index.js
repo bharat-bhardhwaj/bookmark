@@ -240,5 +240,35 @@ router.delete('/delete/:bookmark_id/:tag_id', async (req,res)=>{
 
 
 
+// get all the bookmarks
+// @routes: "/bookmark
+// Method: "get"
+
+
+router.get('/bookmark',async(req,res)=>{
+
+    try {
+        const bookmark = await Bookmark.find().sort({data:-1})
+
+        console.log(bookmark)
+
+        if(!bookmark){
+            return res.status(404).json({msg:"bookmarms does not exist"})
+        }
+
+        res.json(bookmark)
+    } catch (err) {
+        console.error(err.msg);
+        res.status(500).send('server error')
+    }
+    
+    
+
+    
+})
+
+
+
+
 
 module.exports = router;
