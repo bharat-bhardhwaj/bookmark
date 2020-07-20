@@ -6,7 +6,7 @@ const BookmarkSchema=new mongoose.Schema({
         required:true,
         unique:true
     },
-    Title:{
+    title:{
         type:String,
         required:true,
 
