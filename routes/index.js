@@ -166,16 +166,15 @@ router.delete('/deletetag/:id',async (req,res)=>{
 
 // add a tag
 // @routes: "/add/:bookmark_id/:tag_id"
-// data: title
 // Method: "put"
 
 
 router.put('/add/:bookmark_id/:tag_id',async (req,res)=>{
     try {
         const bookmark= await Bookmark.findById(req.params.bookmark_id);
-        const tag =await Tag.findById(req.params.tag_id);
+        
 
-        if(!bookmark || !tag){
+        if(!bookmark){
             return res.status(400).json({msg:'Inavalid credentials'});
         }
 
@@ -185,7 +184,7 @@ router.put('/add/:bookmark_id/:tag_id',async (req,res)=>{
         
 
         const tagb={
-            Tag:tag._id
+            Tag:req.params.tag_id
         }
 
         bookmark.Tags.unshift(tagb)
@@ -200,6 +199,44 @@ router.put('/add/:bookmark_id/:tag_id',async (req,res)=>{
 })
 
 
+// delte a tag from particaular bookmark
+// @routes: "/delete/:bookmark_id/:tag_id"
+// Method: "delete"
+
+
+
+router.delete('/delete/:bookmark_id/:tag_id', async (req,res)=>{
+    try {
+
+        const bookmark =await Bookmark.findById(req.params.bookmark_id);
+
+        //pull a tag 
+        const tag =bookmark.Tags.find(Tagid => Tagid.Tag.toString() === req.params.tag_id)
+
+        if(!tag){
+            return res.status(404).json({msg:"tag does not exit"})
+        }
+
+
+        
+
+        
+        const removeIndex =bookmark.Tags.map(Tagid=>Tagid.Tag.toString()).indexOf(req.params.tag_id);
+
+        bookmark.Tags.splice(removeIndex,1);
+
+        await bookmark.save();
+
+        res.json(bookmark.Tags);
+        
+
+
+        
+    } catch (err) {
+        console.error(err.msg);
+        res.status(500).send('server error')
+    }
+})
 
 
 
